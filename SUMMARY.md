@@ -6,5 +6,5 @@
 * [Jest](jest.md)
 * [Parcel](parcel.md)
 * [ESLint](eslint.md)
-* [주간회고](undefined.md)
 * [JSX](jsx.md)
+* [주간회고](undefined.md)
