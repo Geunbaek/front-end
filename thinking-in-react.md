@@ -1,4 +1,4 @@
-# 리액트로 사고하기
+# Thinking in react
 
 > 리액트로 사고하기
 >
@@ -20,8 +20,7 @@
   * 가능한 경우 클라이언트나 서버측에서 리소스를 캐시할 수 있어야한다.
 * 계층화된 시스템 아키텍처
   * 클라이언트나 서버가 최종 애플리케이션과 통신하는지 중개자와 통신하는지 알 수 없도록 설계해야한다.
-*
-  코드 온 디멘드
+* 코드 온 디멘드
   * 정적 리소스를 전송하지만 경우에 따라 응답에 대한 실행 코드가 포함될 수 있다.
   * 이 경우 코드는 온 디맨드 방식으로만 실행되어야한다.
 
@@ -35,11 +34,11 @@
     * PUT : 자원 전체 교체
     * PATCH : 자원 부분 교체
   * Delete ( DELETE )
-* 자원에 대한 행위 내용 (  Representations ) : HTTP Message Pay Load
+* 자원에 대한 행위 내용 ( Representations ) : HTTP Message Pay Load
 
 ### GraphQL
 
-> API 를 위한 쿼리 언어이자 서버측 런타임으로 클라이언트에게 요청한 만큼의 데이터를 제공하는데  우선 순위를 둔다.
+> API 를 위한 쿼리 언어이자 서버측 런타임으로 클라이언트에게 요청한 만큼의 데이터를 제공하는데 우선 순위를 둔다.
 
 #### 특징
 
@@ -80,7 +79,7 @@ const nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 const doubleNums = nums.map(num => num * 2);
 ```
 
-### Step 1 : UI를 컴포넌트 계층으로 쪼개기  <a href="#step-1-break-the-ui-into-a-component-hierarchy" id="step-1-break-the-ui-into-a-component-hierarchy"></a>
+### Step 1 : UI를 컴포넌트 계층으로 쪼개기 <a href="#step-1-break-the-ui-into-a-component-hierarchy" id="step-1-break-the-ui-into-a-component-hierarchy"></a>
 
 * 간단한 컴포넌트를 모아 복잡한 UI 만든다.
 * 컴포넌트를 나누는 기준
@@ -97,14 +96,14 @@ const doubleNums = nums.map(num => num * 2);
     * 바로 다른 파일로 분리 해야한다는 생각 X
   * 컴포넌트를 나누는 기준이 애매하면 다시 하나의 컴포넌트로 합쳤다가 다시 나누어 줘도 무방하다.
 
-### Step 2 : React로 정적인 버전 구현하기  <a href="#step-2-build-a-static-version-in-react" id="step-2-build-a-static-version-in-react"></a>
+### Step 2 : React로 정적인 버전 구현하기 <a href="#step-2-build-a-static-version-in-react" id="step-2-build-a-static-version-in-react"></a>
 
 * 상호작용이 없는 정적인 페이지를 구현한다.
 * 프로젝트가 커지면 상향식으로 만들고 테스트를 작성하면서 개발하는 것이 더 효율적이다.
 
-### Step 3: 최소한의 데이터만 이용해서 완벽하게 UI State 표현하기  <a href="#step-3-find-the-minimal-but-complete-representation-of-ui-state" id="step-3-find-the-minimal-but-complete-representation-of-ui-state"></a>
+### Step 3: 최소한의 데이터만 이용해서 완벽하게 UI State 표현하기 <a href="#step-3-find-the-minimal-but-complete-representation-of-ui-state" id="step-3-find-the-minimal-but-complete-representation-of-ui-state"></a>
 
-#### State&#x20;
+#### State
 
 * `변경`을 다루기 위한 요소
 * 아무렇게나 막 만들어도 동작은 하나, 일관성과 효율을 위해 DRY 원칙을 따르는 SSOT를 만든다.
@@ -113,6 +112,11 @@ const doubleNums = nums.map(num => num * 2);
 * 다른 state나 props를 이용해 계산 가능하다면 state가 아님
 * 불필요한 state 관리로 effect를 사용하지 마라!
   * [**https://ko.react.dev/learn/you-might-not-need-an-effect**](https://ko.react.dev/learn/you-might-not-need-an-effect)
+
+#### state vs props
+
+* props: 함수를 통해 전달되는 인자의 역할
+* state: 컴포넌트의 메모리 같은 성격
 
 #### DRY ( Don't Repeat Yourself )
 
@@ -124,18 +128,55 @@ const doubleNums = nums.map(num => num * 2);
 
 > 정보 모형과 관련된 데이터 스키마를 모든 데이터 요소를 한 곳에서만 제어 또는 편집하도록 조직
 
+### Step 4: State가 어디에 있어야 할 지 정하기  <a href="#step-4-identify-where-your-state-should-live" id="step-4-identify-where-your-state-should-live"></a>
+
 #### 상태를 어디서 관리해야하나?
 
 * 해당 상태에 의존적인 모든 컴포넌트의 최상위 컴포넌트에서 관리해야함.
-*   상태 끌어올리기
+* state를 소유할 적절한 컴포넌트를 찾지 못했다면, state를 소유하는 컴포넌트를 하나 더 만들어라.
 
-    * 자식의 컴포넌트에서 state 제거 & props 에 해당 property 추가
-    * 하드코딩된 데이터를 부모 컴포넌트로 전달
-    * 공통 부모에 state 를 추가
+### Step 5: 역 데이터 흐름 추가하기 <a href="#step-5-add-inverse-data-flow" id="step-5-add-inverse-data-flow"></a>
 
-    > JS 에서는 함수가 일급 객체이므로 state 뿐 아니라 state를 수정하는 콜백함수도 전달이 가능하다
+#### 상태 끌어올리기
 
-#### &#x20;제어 컴포넌트 vs 비제어 컴포넌트
+* 자식의 컴포넌트에서 state 제거 & props 에 해당 property 추가
+* 하드코딩된 데이터를 부모 컴포넌트로 전달
+* 공통 부모에 state 를 추가
+
+> JS 에서는 함수가 일급 객체이므로 state 뿐 아니라 state를 수정하는 콜백함수도 전달이 가능하다
+
+```typescript
+// 일급 함수
+
+// 1. 변수에 함수를 할당
+
+const foo = () => console.log("foo");
+
+foo();
+
+// 2. 함수의 인자로 함수를 전달
+
+const bar = (callback: () => void) => {
+    callback();
+    console.log("bar");
+} 
+
+bar(foo);
+
+// 3. 함수를 반환할 수 있다.
+
+const bee = () => {
+    console.log("bee");
+    return () => {
+        console.log("zoo");
+    }
+}
+
+const zoo = bee();
+zoo();
+```
+
+#### 제어 컴포넌트 vs 비제어 컴포넌트
 
 * 제어 컴포넌트 : 자체 지역 state 대신 props 에 의해 제어되는 컴포넌트
 * 비제어 컴포넌트 : 지역 state를 갖는 컴포넌트
