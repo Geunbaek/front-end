@@ -7,4 +7,5 @@
 * [Parcel](parcel.md)
 * [ESLint](eslint.md)
 * [JSX](jsx.md)
-* [주간회고](undefined.md)
+* [리액트로 사고하기](undefined.md)
+* [주간회고](undefined-1.md)
